@@ -9,6 +9,11 @@ const upload = require("./storage.config");
 // Products
 router.get("/products", productsController.listProducts);
 router.get("/products/:id", productsController.productDetail);
+router.post(
+  "/products/:id/reviews",
+  authMiddleware.isAuthenticated,
+  productsController.addReview
+);
 
 // Auth
 router.post("/login", authMiddleware.isNotAuthenticated, authController.login);
