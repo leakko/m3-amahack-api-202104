@@ -5,3 +5,20 @@ module.exports.getCurrentUser = (req, res, next) => {
     .then((user) => res.json(user))
     .catch(next);
 };
+
+module.exports.getUser = (req, res, next) => {
+  User.findById(req.params.id)
+    .then((u) => res.json(u))
+    .catch(next);
+};
+
+module.exports.createUser = (req, res, next) => {
+  if (req.file) {
+    req.body.image = req.file.path;
+  }
+  User.create(req.body)
+    .then((user) => {
+      res.json(user);
+    })
+    .catch(next);
+};

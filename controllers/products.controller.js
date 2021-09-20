@@ -1,4 +1,5 @@
 const Product = require("../models/Product.model");
+const Review = require("../models/Review.model");
 const createError = require("http-errors");
 
 module.exports.listProducts = (req, res, next) => {
@@ -22,6 +23,21 @@ module.exports.productDetail = (req, res, next) => {
       } else {
         res.json(product);
       }
+    })
+    .catch(next);
+};
+
+module.exports.addReview = (req, res, next) => {
+  Review.create({
+    ...req.body,
+    author: req.currentUser,
+    product: req.params.id,
+  })
+    .then((review) => {
+      return review.populate("author");
+    })
+    .then((review) => {
+      res.json(review);
     })
     .catch(next);
 };
