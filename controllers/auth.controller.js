@@ -3,10 +3,10 @@ const createError = require("http-errors");
 const jsonwebtoken = require("jsonwebtoken");
 
 module.exports.login = (req, res, next) => {
-	const { email, password } = req.body;
-	console.log(password);
+  const { email, password } = req.body;
+
   // check user exists
-	User.findOne({ email: email }).then((user) => {
+  User.findOne({ email: email }).then((user) => {
     if (!user) {
       next(
         createError(404, {
