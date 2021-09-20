@@ -29,4 +29,11 @@ router.post(
   usersController.createUser
 );
 
+router.patch(
+  "/users/me",
+  authMiddleware.isAuthenticated,
+  upload.single("image"),
+  usersController.editUser
+);
+
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require("../models/User.model");
+const createError = require("http-errors");
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.currentUser)
@@ -20,5 +21,14 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => {
       res.json(user);
     })
+    .catch(next);
+};
+
+module.exports.editUser = (req, res, next) => {
+  if (req.file) {
+    req.body.image = req.file.path;
+  }
+  User.findByIdAndUpdate(req.currentUser, req.body)
+    .then((u) => res.json(u))
     .catch(next);
 };

@@ -42,6 +42,13 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.password;
+        return ret;
+      },
+    },
   }
 );
 
@@ -49,6 +56,17 @@ userSchema.pre("save", function (next) {
   if (this.isModified("password")) {
     bcrypt.hash(this.password, SALT_ROUNDS).then((hash) => {
       this.password = hash;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
+userSchema.pre("findOneAndUpdate", function (next) {
+  if (this._update.password) {
+    bcrypt.hash(this._update.password, SALT_ROUNDS).then((hash) => {
+      this._update.password = hash;
       next();
     });
   } else {
