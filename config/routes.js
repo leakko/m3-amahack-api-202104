@@ -27,3 +27,10 @@ router.post(
 );
 
 module.exports = router;
+
+// Reviews
+router.post(
+  "/product/:id/review",
+  authMiddleware.isAuthenticated,
+  productsController.review
+)
